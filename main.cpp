@@ -64,7 +64,14 @@ void revokePower(Superhero& hero, Powers power)
     hero.powers = bitwise_operator(hero.powers, bitwise_complement(power, std::bit_not<>{}), std::bit_and<>{});
 }
 
-
+bool hasPower(Superhero hero, Powers power)
+{
+    if(static_cast<int>(bitwise_operator(hero.powers,power, std::bit_and<>{})))
+    {
+        return true;
+    }
+    return false;
+}
 
 void printBinary(Powers superpower)
 {
@@ -73,15 +80,6 @@ void printBinary(Powers superpower)
         std::cout <<((static_cast<int>(superpower) >> i) & 1);
     }
     std::cout << std::endl;
-}
-
-bool hasPower(Superhero hero, Powers power)
-{
-    if(static_cast<int>(bitwise_operator(hero.powers,power, std::bit_and<>{})))
-    {
-        return true;
-    }
-    return false;
 }
 
 int main()
