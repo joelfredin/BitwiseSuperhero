@@ -29,6 +29,28 @@ Powers operator&(Powers lhs, Powers rhs)
     return static_cast<Powers>(static_cast<underlying>(lhs) & static_cast<underlying>(rhs));
 }
 
+template<typename EnumType>
+constexpr bool enable_bitwise_operator()
+{
+    return true;
+}
+
+template<typename EnumType>
+constexpr bool enable_bitwise_operator(std::integral_constant<EnumType, EnumType::last_>)
+{
+    return false;
+}
+
+template<typename EnumType>
+constexpr bool has_bitwise_operator = enable_bitwise_operator<EnumType>();
+
+template<typename EnumType, typename BitwiseOp>
+std::enable_if_t<has_bitwise_operator<EnumType>, EnumType> bitwise_operator(EnumType lhs, EnumType rhs, BitwiseOp op)
+{
+    using Underlying = std::underlying_type_t<EnumType>;
+    return static_cast<EnumType>(op(static_cast<Underlying>(lhs),static_cast<Underlying>(rhs)));
+}
+
 
 struct Superhero
 {
@@ -44,6 +66,14 @@ void printBinary(std::uint8_t superpower)
    std::cout << std::endl;
 }
 
+void printBinary2(Powers superpower)
+{
+    for(int i = 7; i >=0; --i)
+    {
+        std::cout << (())
+    }
+}
+
 /*
 bool checkSuperpower(Superhero hero, Powers superpower_to_check)
 {
@@ -55,13 +85,18 @@ bool checkSuperpower(Superhero hero, Powers superpower_to_check)
 }
 */
 
-void performAction(const std::function<void()>& func)
+/*
+int performAction(const std::function<int()>& func, int a, int b)
 {
-    func();
+    //func(a,b);
+    a func() b;
 }
+*/
 
 int main()
 {
+    Powers result_or = bitwise_operator(Powers::FLIGHT, Powers::TELEKINESIS, std::bit_or<>{});
+
     /*
     Superhero my_first_hero;
 
@@ -70,7 +105,7 @@ int main()
     printBinary(my_first_hero.powers);
 
     */
-
+   //std::cout << &(a,b);
 
     return 0;
 }
