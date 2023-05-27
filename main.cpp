@@ -2,7 +2,9 @@
 #include<cstdint>
 #include<functional>
 
-// Possible superpowers
+/*
+POSSIBLE SUPERPOWERS
+*/
 enum class Powers : std::uint8_t
 {
     HUMAN = 0,
@@ -15,19 +17,6 @@ enum class Powers : std::uint8_t
     TRANSFORMATION = 1 << 6,
     TELEKINESIS = 1 << 7
 };
-
-
-Powers operator|(Powers lhs, Powers rhs)
-{
-    using underlying = std::underlying_type_t<Powers>;
-    return static_cast<Powers>(static_cast<underlying>(lhs) | static_cast<underlying>(rhs));
-}
-
-Powers operator&(Powers lhs, Powers rhs)
-{
-    using underlying = std::underlying_type_t<Powers>;
-    return static_cast<Powers>(static_cast<underlying>(lhs) & static_cast<underlying>(rhs));
-}
 
 template<typename EnumType>
 constexpr bool enable_bitwise_operator()
@@ -57,21 +46,20 @@ struct Superhero
     Powers powers{Powers::HUMAN};
 };
 
-void printBinary(std::uint8_t superpower)
+void enablePower(Superhero& hero, Powers power)
 {
-   for(int i = 7; i >= 0; --i)
-   {
-        std::cout << ((superpower >> i) & 1);
-   }
-   std::cout << std::endl;
+    hero.powers = bitwise_operator(hero.powers, power, std::bit_or<>{});
 }
 
-void printBinary2(Powers superpower)
+
+
+void printBinary(Powers superpower)
 {
     for(int i = 7; i >=0; --i)
     {
-        std::cout << (())
+        std::cout <<((static_cast<int>(superpower) >> i) & 1);
     }
+    std::cout << std::endl;
 }
 
 /*
@@ -85,27 +73,22 @@ bool checkSuperpower(Superhero hero, Powers superpower_to_check)
 }
 */
 
-/*
-int performAction(const std::function<int()>& func, int a, int b)
-{
-    //func(a,b);
-    a func() b;
-}
-*/
-
 int main()
 {
-    Powers result_or = bitwise_operator(Powers::FLIGHT, Powers::TELEKINESIS, std::bit_or<>{});
+    Superhero hero1;
 
-    /*
-    Superhero my_first_hero;
+    //Powers result_or = bitwise_operator(Powers::FLIGHT, Powers::TELEKINESIS, std::bit_or<>{});
+    printBinary(hero1.powers);
 
-    std::cout << my_first_hero.powers << std::endl;
+    enablePower(hero1, Powers::FLIGHT);
+    enablePower(hero1, Powers::TELEKINESIS);
 
-    printBinary(my_first_hero.powers);
+    //hero1.powers = result_or;
 
-    */
-   //std::cout << &(a,b);
+    //std::cout << static_cast<std::underlying_type_t<std::uint8_t>>(result_or) << std::endl;
+
+    //std::cout << static_cast<int>(result_or) << std::endl;
+    printBinary(hero1.powers);
 
     return 0;
 }
